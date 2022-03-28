@@ -1,81 +1,45 @@
 require('@babel/polyfill');
+const puppeteer = require('puppeteer');
+const proxyChain = require('proxy-chain');
 
-import { sequelize } from './db'
-import Store from './db/models/Store'
-const { run, quickAddJob } = require("graphile-worker");
-require('chromedriver');
-var webdriver = require('selenium-webdriver');
-const {Builder, By, Key, until} = require('selenium-webdriver');
-import job from './cron'
-const chrome = require('selenium-webdriver/chrome');
-import * as schedule from "node-schedule";
-const request = require('request')
-const proxy = require('selenium-webdriver/proxy');
+(async() => {
+	
+  const oldProxyUrl = 'http://3t3mf:x4nbdt2h@169.197.83.75:25383';
+  const newProxyUrl = await proxyChain.anonymizeProxy(oldProxyUrl);
 
-let options = new chrome.Options();
-options.setChromeBinaryPath(process.env.CHROME_BINARY_PATH);
-let serviceBuilder = new chrome.ServiceBuilder(process.env.CHROME_DRIVER_PATH);
+  const browser = await puppeteer.launch({
+    args: [`--proxy-server=${newProxyUrl}`],
+  });
 
-//Don't forget to add these for heroku
-// options.addArguments("--headless");
-// options.addArguments("--disable-gpu");
-// options.addArguments("--no-sandbox");
-// const proxy = 'fixie:SeN2772qjHvGkaR@velodrome.usefixie.com:80'
-const proxy_address = '169.197.83.75:25383:3t3mf:x4nbdt2h'
+  const page = await browser.newPage();
+  await page.goto('https://httpbin.org/ip');
+  const element = await page.$('pre');
+  const text = await page.evaluate((element: { textContent: any; }) => element.textContent, element);
+  await page.screenshot({ path: 'screenshots/1.png'})
+  console.log('origin')
+  console.log(text);
+  await browser.close();
 
-options.addArguments(`--proxy-server=https://${proxy_address}`)
-
-
-let driver = new webdriver.Builder()
-	.forBrowser('chrome')
-	.setChromeOptions(options)
-	.setChromeService(serviceBuilder)
-	.build();
-
- 
+  await proxyChain.closeAnonymizedProxy(newProxyUrl, true);
+})();
 
 async function main() {
 
  
 }
-// a sid: ACb63a2c5452d7cb241482a3fcb27e21c1
-// auth: 823fd52afe70888c39873c2286d0eff3
-
-// curl 'https://api.twilio.com/2010-04-01/Accounts/ACb63a2c5452d7cb241482a3fcb27e21c1/Messages.json' -X POST \
-// --data-urlencode 'To=+14016880688' \
-// --data-urlencode 'MessagingServiceSid=MGbabec57d878f8deb97ff98f31ea8188c' \
-// --data-urlencode 'Body=test' \
-// -u ACb63a2c5452d7cb241482a3fcb27e21c1:823fd52afe70888c39873c2286d0eff3
-
-interface WhaleWatcherPlayer {
-	name: String
-    table: String
-    stakes: String
-}
 
 
-function getRandomInt(max: number) {
-	return Math.floor(Math.random() * max);
-}
-
- 
 const url = 'https://www.google.com/'
  // const base = 'http://127.0.0.1:8080'
  
 
 
-function delay(ms: number) {
-    return new Promise( resolve => setTimeout(resolve, ms) );
-}
-
- 
-
 async function init() {
   	try {
-		await driver.get(url);
-		const aboutBtn = await driver.findElement(By.xpath('/html/body/div[1]/div[1]/a[1]'))
-		const text = await aboutBtn.getText()
-		console.log(text)
+		// await driver.get(url);
+		// const aboutBtn = await driver.findElement(By.xpath('/html/body/div[1]/div[1]/a[1]'))
+		// const text = await aboutBtn.getText()
+		// console.log(text)
  
     } finally {
 		
@@ -85,8 +49,5 @@ async function init() {
 main().then(async () => {
 	await init()
 
- 	schedule.scheduleJob(`10 * * * * *`, async () => {
-		//every 100 seconds
 
-	});
 })
