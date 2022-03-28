@@ -17,11 +17,13 @@ options.setChromeBinaryPath(process.env.CHROME_BINARY_PATH);
 let serviceBuilder = new chrome.ServiceBuilder(process.env.CHROME_DRIVER_PATH);
 
 //Don't forget to add these for heroku
-options.addArguments("--headless");
-options.addArguments("--disable-gpu");
-options.addArguments("--no-sandbox");
+// options.addArguments("--headless");
+// options.addArguments("--disable-gpu");
+// options.addArguments("--no-sandbox");
 // const proxy = 'fixie:SeN2772qjHvGkaR@velodrome.usefixie.com:80'
-// options.addArguments(`--proxy-server=https://${proxy}`)
+const proxy_address = '169.197.83.75:25383:3t3mf:x4nbdt2h'
+
+options.addArguments(`--proxy-server=https://${proxy_address}`)
 
 
 let driver = new webdriver.Builder()
