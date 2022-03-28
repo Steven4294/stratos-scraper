@@ -8,7 +8,7 @@ const proxyChain = require('proxy-chain');
   const newProxyUrl = await proxyChain.anonymizeProxy(oldProxyUrl);
 
   const browser = await puppeteer.launch({
-    args: [`--proxy-server=${newProxyUrl}`],
+    args: [`--proxy-server=${newProxyUrl}`, '--no-sandbox'],
   });
 
   const page = await browser.newPage();
