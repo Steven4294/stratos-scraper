@@ -11,7 +11,7 @@ async function init() {
   const newProxyUrl = await proxyChain.anonymizeProxy(oldProxyUrl);
 
   const browser = await puppeteer.launch({
-    headless: false,
+    headless: true,
     args: [`--proxy-server=${newProxyUrl}`, '--no-sandbox'],
   });
 
