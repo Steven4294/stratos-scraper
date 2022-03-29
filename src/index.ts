@@ -25,7 +25,7 @@ async function init() {
 
   const browser = await puppeteer.launch({
     headless: false,
-    args: [`--proxy-server=${newProxyUrl}`, '--no-sandbox'],
+    args: [`--proxy-server=${newProxyUrl}`],//, '--no-sandbox'],
   });
 
   const page = await browser.newPage();
