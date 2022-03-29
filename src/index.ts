@@ -30,11 +30,13 @@ async function init() {
 
   await page.focus('#submit')
   await page.focus('#submit')
+  await page.waitFor(500);
 
-await page.keyboard.type('\n');
+  await page.keyboard.type('\n');
 
-await page.waitFor(500);
-
+  await page.waitFor(500);
+  await page.click('#submit')
+  await page.click('#submit')
 
   await browser.close();
   await proxyChain.closeAnonymizedProxy(newProxyUrl, true);
