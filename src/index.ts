@@ -16,8 +16,8 @@ async function init() {
   });
 
   const page = await browser.newPage();
-  // await page.goto('https://www.pokersiteinfo.com/landing');
-  await page.goto('http://localhost:4200/landing');
+  await page.goto('https://www.pokersiteinfo.com/landing');
+  // await page.goto('http://localhost:4200/landing');
   // const element = await page.$('pre');
   const element = await page.$('#title')
    await page.type('#form', 'Test Name')
