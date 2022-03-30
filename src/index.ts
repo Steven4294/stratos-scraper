@@ -18,7 +18,7 @@ async function init() {
   const page = await browser.newPage();
   await page.goto('https://www.pokersiteinfo.com/form');
  
-   await page.type('#form', 'Test Name2')
+   await page.type('#form', ' ')
    await page.waitFor(2000);
   //  await page.click('#submit')
  
