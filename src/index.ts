@@ -16,7 +16,7 @@ async function init() {
   });
 
   const page = await browser.newPage();
-  await page.goto('https://www.pokersiteinfo.com/landing');
+  await page.goto('https://www.pokersiteinfo.com/form');
  
    await page.type('#form', 'Test Name2')
    await page.waitFor(2000);
@@ -41,13 +41,64 @@ async function init() {
   await proxyChain.closeAnonymizedProxy(newProxyUrl, true);
 }
 
+async function botClick() {
+  // route bot 
+  const r = Math.random()
+  if (r < 0.1) {
+    await clickLinkAndMakeAccount()
+  } else {
+    await clickLink()
+  }
+}
+
+
+async function clickLink() {}
+
+async function clickLinkAndMakeAccount() {}
+
 main().then(async () => {
-	  init()
-    schedule.scheduleJob(`20 * * * * *`, async () => {
+	  // init()
+    // schedule.scheduleJob(`20 * * * * *`, async () => {
+		//   //every 100 seconds
+    //   await init()
+    //   console.log('console.log')
+
+	  // });
+
+    // 
+    // var initDate = (new Date()).getTime()
+    var initDate: number | undefined = undefined
+    schedule.scheduleJob(`10 * * * * *`, async () => {
+      if (initDate === undefined) {
+        initDate = (new Date()).getTime()
+      }
+
+      const r = Math.random()
+      await delay(60000*r)
 		  //every 100 seconds
-      await init()
-      console.log('console.log')
+      const d = new Date()
+      console.log(`scheduleJob() ${d.getTime() - initDate}`)
+      init()
 
 	  });
 
 })
+
+function delay(ms: number) {
+    return new Promise( resolve => setTimeout(resolve, ms) );
+}
+
+function getRandomInt(max: number) {
+  return Math.floor(Math.random() * max);
+}
+
+
+// *    *    *    *    *    *
+// ┬    ┬    ┬    ┬    ┬    ┬
+// │    │    │    │    │    │
+// │    │    │    │    │    └ day of week (0 - 7) (0 or 7 is Sun)
+// │    │    │    │    └───── month (1 - 12)
+// │    │    │    └────────── day of month (1 - 31)
+// │    │    └─────────────── hour (0 - 23)
+// │    └──────────────────── minute (0 - 59)
+// └───────────────────────── second (0 - 59, OPTIONAL)
