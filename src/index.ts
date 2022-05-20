@@ -117,63 +117,35 @@ main().then(async () => {
     // 
     // var initDate = (new Date()).getTime()
 
-    schedule.scheduleJob(`0 * 10 * * *`, async () => {
-      runCheck()
-	  });
+    const s1 = `0 * 10 * * *`
+    const s2 = `0 * 11 * * *`
+    const s3 = `0 * 12 * * *`
+    const s4 = `0 * 13 * * *`
+    const s5 = `0 * 14 * * *`
+    const s6 = `0 * 15 * * *`
+    const s7 = `0 * 16 * * *`
+    const s8 = `0 * 17* * *`
+    const s9 = `0 * 18 * * *`
+    const s10 = `0 * 19 * * *`
 
-    schedule.scheduleJob(`0 * 11 * * *`, async () => {
-      runCheck()
-	  });
 
-    schedule.scheduleJob(`0 * 12 * * *`, async () => {
-      runCheck()
-	  });
+    const arr = [s1, s2, s3, s4, s5, s6, s7, s8, s9, s10];
+    arr.map(x => {
+      schedule.scheduleJob(x, async () => {
+        runCheck(x)
+      });
+    })
    
-    schedule.scheduleJob(`0 * 13 * * *`, async () => {
-      runCheck()
-	  });
-
-    schedule.scheduleJob(`0 * 14 * * *`, async () => {
-      runCheck()
-	  });
-
-    schedule.scheduleJob(`0 * 15 * * *`, async () => {
-      runCheck()
-	  });
-
-    schedule.scheduleJob(`0 * 16 * * *`, async () => {
-      runCheck()
-	  });
-
-    schedule.scheduleJob(`0 * 16 * * *`, async () => {
-      runCheck()
-	  });
-
-    schedule.scheduleJob(`0 * 17 * * *`, async () => {
-      runCheck()
-	  });
-
-    schedule.scheduleJob(`0 * 18 * * *`, async () => {
-      runCheck()
-	  });
-
-    schedule.scheduleJob(`0 * 19 * * *`, async () => {
-      runCheck()
-	  });
-
-    schedule.scheduleJob(`0 * 20 * * *`, async () => {
-      runCheck()
-	  });
 
 })
 
-async function runCheck() {
+async function runCheck(x: string) {
   const r = Math.random()
   if (r < 0.3) { return }
   const M = 45 // number of minutes 
   await delay(100*60*M*r)
   const d = new Date()
-  sendDiscordMessage('log')
+  sendDiscordMessage(x)
 
   return 
   init()
