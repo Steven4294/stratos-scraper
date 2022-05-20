@@ -1,9 +1,10 @@
-require('@babel/polyfill');
-const puppeteer = require('puppeteer');
-const proxyChain = require('proxy-chain');
+ 
 import * as schedule from "node-schedule";
+import fetch from "node-fetch";
+import * as puppeteer from "puppeteer"
+import proxyChain from "proxy-chain";
 
-
+var headless = false
 async function main() { }
 
 async function init() {
@@ -11,28 +12,18 @@ async function init() {
   const newProxyUrl = await proxyChain.anonymizeProxy(oldProxyUrl);
 
   const browser = await puppeteer.launch({
-    headless: true,
+    headless: headless,
     args: [`--proxy-server=${newProxyUrl}`, '--no-sandbox'],
   });
 
   const page = await browser.newPage();
   await page.goto('https://www.pokersiteinfo.com/form');
  
-   await page.type('#form', ' ')
-   await page.waitFor(2000);
-  //  await page.click('#submit')
- 
-  //  const xp = "/html/body/app-landing/button"
-  // await page.waitForXPath(xp) // ✅
-  // const linkEx = await page.$x(xp)
-  // if (linkEx.length > 0) {
-  //   console.log('clicking')
-  //   await linkEx[0].click()
-  // }
-  // await page.waitFor(5000);
-   // await page.focus('#submit')
+  await page.type('#form', ' ')
+  await page.waitFor(2000);
+
   await page.focus('#submit')
-  // await page.waitFor(500);
+
 
   await page.keyboard.type('\n');
   await page.waitFor(10000);
@@ -47,14 +38,72 @@ async function botClick() {
   if (r < 0.1) {
     await clickLinkAndMakeAccount()
   } else {
-    await clickLink()
+    //await clickLink()
   }
 }
 
 
-async function clickLink() {}
+async function clickLink(page: any, browser: any, newProxyUrl: any) {
+  console.log(`clickLinkAndMakeAccount()`)
 
-async function clickLinkAndMakeAccount() {}
+  await page.goto('https://www.pokersiteinfo.com/bovada');
+ 
+  const xp = `/html/body/app-bovada/div/main/article/div/div[15]/p/a`
+  await page.waitForXPath(xp) // ✅
+  const linkEx = await page.$x(xp)
+  if (linkEx.length > 0) {
+    await linkEx[0].click()
+  }
+}
+
+async function makeAccount(page: any, browser: any, newProxyUrl: any) {
+  await page.type('#form', 'Johnny')
+  await page.waitFor(2000);
+  await page.focus('#submit')
+
+  await page.keyboard.type('\n');
+  await page.waitFor(10000);
+
+  await browser.close();
+  // await proxyChain.closeAnonymizedProxy(newProxyUrl, true);
+}
+
+async function clickLinkAndMakeAccount() {
+  // const oldProxyUrl = 'http://3t3mf:x4nbdt2h@169.197.83.75:25383';
+  // const newProxyUrl = await proxyChain.anonymizeProxy(oldProxyUrl);
+
+  // const browser = await puppeteer.launch({
+  //   headless: headless,
+  //   args: [`--proxy-server=${newProxyUrl}`, '--no-sandbox'],
+  // });
+
+  // const page = await browser.newPage();
+
+  // await clickLink(page, browser, newProxyUrl)
+  // await makeAccount(page, browser, newProxyUrl)
+
+  /* * * */
+}
+
+
+async function sendDiscordMessage(message: string) {
+  return new Promise <{}> (async (resolve, reject) => {
+      const url = `https://api.stratosnetwork.com/shared/sendDiscordMessage`
+  
+       const body = {
+          message: message,
+      }
+
+      
+      const response = await fetch(url, {
+        method: 'POST', 
+        body: JSON.stringify(body),
+        headers: {'Content-Type': 'application/json'}
+      });
+      resolve({})
+ 
+  })
+}
 
 main().then(async () => {
 	  // init()
@@ -67,22 +116,68 @@ main().then(async () => {
 
     // 
     // var initDate = (new Date()).getTime()
-    var initDate: number | undefined = undefined
-    schedule.scheduleJob(`10 * * * * *`, async () => {
-      if (initDate === undefined) {
-        initDate = (new Date()).getTime()
-      }
 
-      const r = Math.random()
-      await delay(60000*r)
-		  //every 100 seconds
-      const d = new Date()
-      console.log(`scheduleJob() ${d.getTime() - initDate}`)
-      init()
+    schedule.scheduleJob(`0 * 10 * * *`, async () => {
+      runCheck()
+	  });
 
+    schedule.scheduleJob(`0 * 11 * * *`, async () => {
+      runCheck()
+	  });
+
+    schedule.scheduleJob(`0 * 12 * * *`, async () => {
+      runCheck()
+	  });
+   
+    schedule.scheduleJob(`0 * 13 * * *`, async () => {
+      runCheck()
+	  });
+
+    schedule.scheduleJob(`0 * 14 * * *`, async () => {
+      runCheck()
+	  });
+
+    schedule.scheduleJob(`0 * 15 * * *`, async () => {
+      runCheck()
+	  });
+
+    schedule.scheduleJob(`0 * 16 * * *`, async () => {
+      runCheck()
+	  });
+
+    schedule.scheduleJob(`0 * 16 * * *`, async () => {
+      runCheck()
+	  });
+
+    schedule.scheduleJob(`0 * 17 * * *`, async () => {
+      runCheck()
+	  });
+
+    schedule.scheduleJob(`0 * 18 * * *`, async () => {
+      runCheck()
+	  });
+
+    schedule.scheduleJob(`0 * 19 * * *`, async () => {
+      runCheck()
+	  });
+
+    schedule.scheduleJob(`0 * 20 * * *`, async () => {
+      runCheck()
 	  });
 
 })
+
+async function runCheck() {
+  const r = Math.random()
+  if (r < 0.3) { return }
+  const M = 45 // number of minutes 
+  await delay(100*60*M*r)
+  const d = new Date()
+  sendDiscordMessage('log')
+
+  return 
+  init()
+}
 
 function delay(ms: number) {
     return new Promise( resolve => setTimeout(resolve, ms) );
