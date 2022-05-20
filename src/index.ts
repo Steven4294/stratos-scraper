@@ -127,9 +127,24 @@ main().then(async () => {
     const s8 = `0 * 17* * *`
     const s9 = `0 * 18 * * *`
     const s10 = `0 * 19 * * *`
+    const s11 = `0 * 20 * * *`
+    const s12 = `0 * 21 * * *`
+    const s13 = `0 * 22 * * *`
+    const s14 = `0 * 23 * * *`
+    const s15 = `0 * 24 * * *`
+    const s16 = `0 * 0 * * *`
+    const s17 = `0 * 1 * * *`
+    const s18 = `0 * 2 * * *`
+    const s19 = `0 * 3 * * *`
+    const s20 = `0 * 4 * * *`
+    const s21 = `0 * 5 * * *`
+    const s22 = `0 * 6 * * *`
+    const s23 = `0 * 7 * * *`
+    const s24 = `0 * 8 * * *`
+    const s25 = `0 * 9 * * *`
 
 
-    const arr = [s1, s2, s3, s4, s5, s6, s7, s8, s9, s10];
+    const arr = [s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20, s21, s22, s23, s24, s25];
     arr.map(x => {
       schedule.scheduleJob(x, async () => {
         runCheck(x)
