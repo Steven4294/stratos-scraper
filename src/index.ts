@@ -94,6 +94,7 @@ async function sendDiscordMessage(message: string) {
           message: message,
       }
 
+      console.log(`sending ${message} to discord`)
       
       const response = await fetch(url, {
         method: 'POST', 
@@ -117,7 +118,7 @@ main().then(async () => {
     // 
     // var initDate = (new Date()).getTime()
 
-    const s1 = `0 * 10 * * *`
+    const s1 = `0 * * * * *`
     const s2 = `0 * 11 * * *`
     const s3 = `0 * 12 * * *`
     const s4 = `0 * 13 * * *`
@@ -144,21 +145,31 @@ main().then(async () => {
     const s25 = `0 * 9 * * *`
 
 
-    const arr = [s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20, s21, s22, s23, s24, s25];
+    // const arr = [s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20, s21, s22, s23, s24, s25];
+    var arr: string[] = []
+    for (var i = 0; i < 24; i++) {
+      arr.push(`0 * ${i} * * *`)
+    }
+    console.log(arr)
     arr.map(x => {
+      console.log(x)
       schedule.scheduleJob(x, async () => {
         runCheck(x)
       });
     })
-   
+    schedule.scheduleJob(`0 * * * * *`, async () => {
+      // runCheck(x)
+    });
 
 })
 
 async function runCheck(x: string) {
   const r = Math.random()
-  if (r < 0.3) { return }
-  const M = 45 // number of minutes 
-  await delay(100*60*M*r)
+  // if (r < 0.3) { return }
+  const M = 0.0 // number of minutes 
+  const delay_length = 100*60*M*r
+  console.log(`r ${r} ${x} ${delay_length}`)
+  await delay(delay_length)
   const d = new Date()
   sendDiscordMessage(x)
 

@@ -68,6 +68,7 @@ async function sendDiscordMessage(message) {
         const body = {
             message: message,
         };
+        console.log(`sending ${message} to discord`);
         const response = await fetch(url, {
             method: 'POST',
             body: JSON.stringify(body),
@@ -85,52 +86,56 @@ main().then(async () => {
     // });
     // 
     // var initDate = (new Date()).getTime()
-    schedule.scheduleJob(`0 * 10 * * *`, async () => {
-        runCheck();
+    const s1 = `0 * * * * *`;
+    const s2 = `0 * 11 * * *`;
+    const s3 = `0 * 12 * * *`;
+    const s4 = `0 * 13 * * *`;
+    const s5 = `0 * 14 * * *`;
+    const s6 = `0 * 15 * * *`;
+    const s7 = `0 * 16 * * *`;
+    const s8 = `0 * 17* * *`;
+    const s9 = `0 * 18 * * *`;
+    const s10 = `0 * 19 * * *`;
+    const s11 = `0 * 20 * * *`;
+    const s12 = `0 * 21 * * *`;
+    const s13 = `0 * 22 * * *`;
+    const s14 = `0 * 23 * * *`;
+    const s15 = `0 * 24 * * *`;
+    const s16 = `0 * 0 * * *`;
+    const s17 = `0 * 1 * * *`;
+    const s18 = `0 * 2 * * *`;
+    const s19 = `0 * 3 * * *`;
+    const s20 = `0 * 4 * * *`;
+    const s21 = `0 * 5 * * *`;
+    const s22 = `0 * 6 * * *`;
+    const s23 = `0 * 7 * * *`;
+    const s24 = `0 * 8 * * *`;
+    const s25 = `0 * 9 * * *`;
+    // const arr = [s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20, s21, s22, s23, s24, s25];
+    var arr = [];
+    for (var i = 0; i < 24; i++) {
+        arr.push(`0 * ${i} * * *`);
+    }
+    console.log(arr);
+    arr.map(x => {
+        console.log(x);
+        schedule.scheduleJob(x, async () => {
+            runCheck(x);
+        });
     });
-    schedule.scheduleJob(`0 * 11 * * *`, async () => {
-        runCheck();
-    });
-    schedule.scheduleJob(`0 * 12 * * *`, async () => {
-        runCheck();
-    });
-    schedule.scheduleJob(`0 * 13 * * *`, async () => {
-        runCheck();
-    });
-    schedule.scheduleJob(`0 * 14 * * *`, async () => {
-        runCheck();
-    });
-    schedule.scheduleJob(`0 * 15 * * *`, async () => {
-        runCheck();
-    });
-    schedule.scheduleJob(`0 * 16 * * *`, async () => {
-        runCheck();
-    });
-    schedule.scheduleJob(`0 * 16 * * *`, async () => {
-        runCheck();
-    });
-    schedule.scheduleJob(`0 * 17 * * *`, async () => {
-        runCheck();
-    });
-    schedule.scheduleJob(`0 * 18 * * *`, async () => {
-        runCheck();
-    });
-    schedule.scheduleJob(`0 * 19 * * *`, async () => {
-        runCheck();
-    });
-    schedule.scheduleJob(`0 * 20 * * *`, async () => {
-        runCheck();
+    schedule.scheduleJob(`0 * * * * *`, async () => {
+        // runCheck(x)
     });
 });
-async function runCheck() {
+async function runCheck(x) {
     const r = Math.random();
-    if (r < 0.3) {
-        return;
-    }
-    const M = 45; // number of minutes 
-    await delay(100 * 60 * M * r);
+    // if (r < 0.3) { return }
+    const M = 0.0; // number of minutes 
+    const delay_length = 100 * 60 * M * r;
+    console.log(`r ${r} ${x} ${delay_length}`);
+    await delay(delay_length);
     const d = new Date();
-    sendDiscordMessage('log');
+    sendDiscordMessage(x);
     return;
     init();
 }
