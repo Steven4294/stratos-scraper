@@ -1,11 +1,39 @@
- 
 import * as schedule from "node-schedule";
 import fetch from "node-fetch";
-import * as puppeteer from "puppeteer"
+import puppeteer from 'puppeteer'
 import proxyChain from "proxy-chain";
 
-var headless = false
+var headless = true
 async function main() { }
+
+async function clickLink() {
+  const oldProxyUrl = 'http://3t3mf:x4nbdt2h@169.197.83.75:25383';
+  const newProxyUrl = await proxyChain.anonymizeProxy(oldProxyUrl);
+
+  const browser = await puppeteer.launch({
+    headless: headless,
+    args: [`--proxy-server=${newProxyUrl}`, '--no-sandbox'],
+  });
+
+  const page = await browser.newPage();
+
+  const r = Math.random()
+  const selector = '#__next > main > article > div > div:nth-child(17) > p > a'
+  if (r < .7) {
+    // bovada
+    await page.goto('https://www.pokersiteinfo.com/bovada');
+  } else {
+    await page.goto('https://www.pokersiteinfo.com/ignition');
+  }
+
+  await page.waitForSelector(selector)
+  await page.click(selector)
+  const r2 = Math.random()
+  await delay(r2*5000)
+  await browser.close();
+  await proxyChain.closeAnonymizedProxy(newProxyUrl, true);
+
+}
 
 async function init() {
   const oldProxyUrl = 'http://3t3mf:x4nbdt2h@169.197.83.75:25383';
@@ -39,20 +67,6 @@ async function botClick() {
     await clickLinkAndMakeAccount()
   } else {
     //await clickLink()
-  }
-}
-
-
-async function clickLink(page: any, browser: any, newProxyUrl: any) {
-  console.log(`clickLinkAndMakeAccount()`)
-
-  await page.goto('https://www.pokersiteinfo.com/bovada');
- 
-  const xp = `/html/body/app-bovada/div/main/article/div/div[15]/p/a`
-  await page.waitForXPath(xp) // ✅
-  const linkEx = await page.$x(xp)
-  if (linkEx.length > 0) {
-    await linkEx[0].click()
   }
 }
 
@@ -123,7 +137,9 @@ main().then(async () => {
     // const arr = [s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20, s21, s22, s23, s24, s25];
     var arr: string[] = []
     for (var i = 0; i < 24; i++) {
-      arr.push(`0 0 ${i} * * *`)
+      if (i < 3) { arr.push(`0 0 ${i} * * *`)  }
+      if (i > 15) { arr.push(`0 0 ${i} * * *`)  }
+
     }
     console.log(arr)
     arr.map(x => {
@@ -132,24 +148,20 @@ main().then(async () => {
         runCheck(x)
       });
     })
-    schedule.scheduleJob(`0 * * * * *`, async () => {
-      // runCheck(x)
-    });
+    
 
 })
 
 async function runCheck(x: string) {
   const r = Math.random()
-  // if (r < 0.3) { return }
-  const M = 0.0 // number of minutes 
+  if (r < 0.3) { return }
+  const M = 20 // number of minutes 
   const delay_length = 100*60*M*r
-  console.log(`r ${r} ${x} ${delay_length}`)
-  await delay(delay_length)
-  const d = new Date()
-  sendDiscordMessage(x)
+   await delay(delay_length)
 
-  return 
-  init()
+  sendDiscordMessage(`r ${r} ${x} ${delay_length}`)
+ 
+  clickLink()
 }
 
 function delay(ms: number) {

@@ -1,9 +1,33 @@
 import * as schedule from "node-schedule";
 import fetch from "node-fetch";
-import * as puppeteer from "puppeteer";
+import puppeteer from 'puppeteer';
 import proxyChain from "proxy-chain";
-var headless = false;
+var headless = true;
 async function main() { }
+async function clickLink() {
+    const oldProxyUrl = 'http://3t3mf:x4nbdt2h@169.197.83.75:25383';
+    const newProxyUrl = await proxyChain.anonymizeProxy(oldProxyUrl);
+    const browser = await puppeteer.launch({
+        headless: headless,
+        args: [`--proxy-server=${newProxyUrl}`, '--no-sandbox'],
+    });
+    const page = await browser.newPage();
+    const r = Math.random();
+    const selector = '#__next > main > article > div > div:nth-child(17) > p > a';
+    if (r < .7) {
+        // bovada
+        await page.goto('https://www.pokersiteinfo.com/bovada');
+    }
+    else {
+        await page.goto('https://www.pokersiteinfo.com/ignition');
+    }
+    await page.waitForSelector(selector);
+    await page.click(selector);
+    const r2 = Math.random();
+    await delay(r2 * 5000);
+    await browser.close();
+    await proxyChain.closeAnonymizedProxy(newProxyUrl, true);
+}
 async function init() {
     const oldProxyUrl = 'http://3t3mf:x4nbdt2h@169.197.83.75:25383';
     const newProxyUrl = await proxyChain.anonymizeProxy(oldProxyUrl);
@@ -29,16 +53,6 @@ async function botClick() {
     }
     else {
         //await clickLink()
-    }
-}
-async function clickLink(page, browser, newProxyUrl) {
-    console.log(`clickLinkAndMakeAccount()`);
-    await page.goto('https://www.pokersiteinfo.com/bovada');
-    const xp = `/html/body/app-bovada/div/main/article/div/div[15]/p/a`;
-    await page.waitForXPath(xp); // ✅
-    const linkEx = await page.$x(xp);
-    if (linkEx.length > 0) {
-        await linkEx[0].click();
     }
 }
 async function makeAccount(page, browser, newProxyUrl) {
@@ -86,35 +100,16 @@ main().then(async () => {
     // });
     // 
     // var initDate = (new Date()).getTime()
-    const s1 = `0 * * * * *`;
-    const s2 = `0 * 11 * * *`;
-    const s3 = `0 * 12 * * *`;
-    const s4 = `0 * 13 * * *`;
-    const s5 = `0 * 14 * * *`;
-    const s6 = `0 * 15 * * *`;
-    const s7 = `0 * 16 * * *`;
-    const s8 = `0 * 17* * *`;
-    const s9 = `0 * 18 * * *`;
-    const s10 = `0 * 19 * * *`;
-    const s11 = `0 * 20 * * *`;
-    const s12 = `0 * 21 * * *`;
-    const s13 = `0 * 22 * * *`;
-    const s14 = `0 * 23 * * *`;
-    const s15 = `0 * 24 * * *`;
-    const s16 = `0 * 0 * * *`;
-    const s17 = `0 * 1 * * *`;
-    const s18 = `0 * 2 * * *`;
-    const s19 = `0 * 3 * * *`;
-    const s20 = `0 * 4 * * *`;
-    const s21 = `0 * 5 * * *`;
-    const s22 = `0 * 6 * * *`;
-    const s23 = `0 * 7 * * *`;
-    const s24 = `0 * 8 * * *`;
-    const s25 = `0 * 9 * * *`;
+    clickLink();
     // const arr = [s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20, s21, s22, s23, s24, s25];
     var arr = [];
     for (var i = 0; i < 24; i++) {
-        arr.push(`0 * ${i} * * *`);
+        if (i < 3) {
+            arr.push(`0 0 ${i} * * *`);
+        }
+        if (i > 15) {
+            arr.push(`0 0 ${i} * * *`);
+        }
     }
     console.log(arr);
     arr.map(x => {
@@ -123,21 +118,17 @@ main().then(async () => {
             runCheck(x);
         });
     });
-    schedule.scheduleJob(`0 * * * * *`, async () => {
-        // runCheck(x)
-    });
 });
 async function runCheck(x) {
     const r = Math.random();
-    // if (r < 0.3) { return }
-    const M = 0.0; // number of minutes 
+    if (r < 0.3) {
+        return;
+    }
+    const M = 20; // number of minutes 
     const delay_length = 100 * 60 * M * r;
-    console.log(`r ${r} ${x} ${delay_length}`);
     await delay(delay_length);
-    const d = new Date();
-    sendDiscordMessage(x);
-    return;
-    init();
+    sendDiscordMessage(`r ${r} ${x} ${delay_length}`);
+    clickLink();
 }
 function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
