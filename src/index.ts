@@ -122,19 +122,6 @@ async function sendDiscordMessage(message: string) {
 
 main().then(async () => {
 	  // init()
-    // schedule.scheduleJob(`20 * * * * *`, async () => {
-		//   //every 100 seconds
-    //   await init()
-    //   console.log('console.log')
-
-	  // });
-
-    // 
-    // var initDate = (new Date()).getTime()
-
-
-
-    // const arr = [s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20, s21, s22, s23, s24, s25];
     var arr: string[] = []
     for (var i = 0; i < 24; i++) {
       if (i < 3) { arr.push(`0 0 ${i} * * *`)  }
@@ -148,15 +135,13 @@ main().then(async () => {
         runCheck(x)
       });
     })
-    
-
 })
 
 async function runCheck(x: string) {
   const r = Math.random()
   if (r < 0.3) { return }
   const M = 20 // number of minutes 
-  const delay_length = 100*60*M*r
+  const delay_length = 1000*60*M*r
    await delay(delay_length)
 
   sendDiscordMessage(`r ${r} ${x} ${delay_length}`)
